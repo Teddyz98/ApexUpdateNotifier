@@ -1,20 +1,16 @@
 import dotenv
 import telebot
 import os
-import requests
+from Utils import RESTreq as req
 
 dotenv.load_dotenv()
-API_KEY = os.environ.get('API_KEY')
-os.environ['TOKEN'] = '<ADD_BEARER_TOKEN>'
+API_KEY_TELEGRAM = os.environ.get('API_KEY_TELEGRAM')
 
-bot = telebot.TeleBot(API_KEY)
+bot = telebot.TeleBot(API_KEY_TELEGRAM)
 
-def getTweet():
-    twurl -X GET "/labs/2/tweets/1138505981460193280?expansions=attachments.media_keys&tweet.fields=created_at,author_id,lang,source,public_metrics,context_annotations,entities"
+print(req.getMapRotation())
 
-
-        
-@bot.message_handler(content_types=['text'])
+#@bot.message_handler(content_types=['text'])
 #def handle_command_adminwindow(message):
 #    global msg_count
 #    current_time = datetime.datetime.now().hour
