@@ -3,7 +3,7 @@
 # TODO
 
 - File con funzioni specifiche(http requests)
-- Controllo periodo per status server
+- Controllo periodico per status server
 - Comandi per informazioni varie
 - Retrieve stats
 

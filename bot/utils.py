@@ -1,3 +1,4 @@
+import http
 import dotenv
 import requests
 import os
@@ -49,3 +50,14 @@ def get_map_informations(map):
         ➡\tNext Map: {next_map["map"]}\n
         ⏰\tStart: {next_map["time_start"]}\n
     """
+
+"""
+    Get the raw servers status
+"""
+def get_server_status_raw():
+    status = requests.get(f'https://api.mozambiquehe.re/servers?auth={APEX_API_KEY}')
+    return status.json()
+
+# TODO def show_all_regions_status():
+
+# TODO def show_region_status():  Example: ["Origin_login"]["EU-West"]["Status"]
