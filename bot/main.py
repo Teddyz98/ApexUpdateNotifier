@@ -1,7 +1,7 @@
 import dotenv
 import telebot
 import os
-from utils import get_battle_royale_current_map, get_map_informations, get_server_status
+from utils import get_battle_royale_current_map, get_map_informations
 
 dotenv.load_dotenv()
 API_KEY_TELEGRAM = os.environ.get('API_KEY_TELEGRAM')
@@ -15,7 +15,7 @@ def greet(message):
 
 @bot.message_handler(commands=['map'])
 def map(message):
-    bot.send_message(message.chat.id, get_map_informations(get_battle_royale_current_map()))
+    bot.send_message(message.chat.id, get_map_informations(get_battle_royale_current_map()), parse_mode='MarkdownV2')
 
 """
 @bot.message_handler(commands=['status'])
