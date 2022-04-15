@@ -1,3 +1,4 @@
+from telnetlib import STATUS
 import dotenv
 import requests
 import os
@@ -51,9 +52,38 @@ def get_map_informations(map):
     Get the raw servers status
 """
 def get_server_status_raw():
-    status = requests.get(f'https://api.mozambiquehe.re/servers?auth={APEX_API_KEY}')
-    return status.json()
+    try:
+        status = requests.get(f'https://api.mozambiquehe.re/servers?auth={APEX_API_KEY}')
+        return status.json()
+    except:
+        print('Some error occured while retrieving the raw data from the API server')
 
 # TODO def show_all_regions_status():
 
-# TODO def show_region_status():  Example: ["Origin_login"]["EU-West"]["Status"]
+def show_region_status(server, region):
+
+    status = ''
+
+    try:
+        if (region=='EU-West'):
+            ea_acc_server_status = server['EA_accounts']['EU-West']['Status']
+            print('Accounts Server: ' + ea_acc_server_status + (' 🟢' if ea_acc_server_status=='UP' else ' 🔴') + '\n\n')
+            status += 'Accounts Server: ' + ea_acc_server_status + (' 🟢' if ea_acc_server_status=='UP' else ' 🔴') + '\n\n'
+
+            crossplay_auth_server_status = server['ApexOauth_Crossplay']['EU-West']['Status']
+            print('Crossplay Auth Server: ' + crossplay_auth_server_status + (' 🟢' if crossplay_auth_server_status=='UP' else ' 🔴') + '\n\n')
+            status += 'Crossplay Auth Server: ' + crossplay_auth_server_status + (' 🟢' if crossplay_auth_server_status=='UP' else ' 🔴') + '\n\n'
+
+        elif(region=='EU-East'):
+            ea_acc_server_status = server['EA_accounts']['EU-East']['Status']
+            print('Accounts Server: ' + ea_acc_server_status + (' 🟢' if ea_acc_server_status=='UP' else ' 🔴'))
+            status += 'Accounts Server: ' + ea_acc_server_status + (' 🟢' if ea_acc_server_status=='UP' else ' 🔴')
+            
+            crossplay_auth_server_status = server['ApexOauth_Crossplay']['EU-East']['Status']
+            print('Crossplay Auth Server: ' + crossplay_auth_server_status + (' 🟢' if crossplay_auth_server_status=='UP' else ' 🔴') + '\n\n')
+            status += 'Crossplay Auth Server: ' + crossplay_auth_server_status + (' 🟢' if crossplay_auth_server_status=='UP' else ' 🔴') + '\n\n'
+
+    except:
+        print('Some error occured while retrieving the raw data from json file')
+
+    return status
