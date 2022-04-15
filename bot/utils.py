@@ -1,4 +1,3 @@
-import http
 import dotenv
 import requests
 import os
@@ -42,14 +41,11 @@ def get_arena_current_map():
 def get_map_informations(map):
     current_map = map["current"]
     next_map = map["next"]
-    print(current_map)
     next_map["time_start"] = datetime.strftime(datetime.fromtimestamp(next_map["start"]), '%H:%M')
-    return f"""
-        📍\tCurrent Map: {current_map["map"]}\n
-        🕒\tRemaining Timer: {current_map["remainingTimer"]}\n
-        ➡\tNext Map: {next_map["map"]}\n
-        ⏰\tStart: {next_map["time_start"]}\n
-    """
+    return (f"📍\tCurrent Map: *{current_map['map']}*\n\n"
+        f"\t🕒\tRemaining Timer: {current_map['remainingTimer']}\n\n"
+        f"\t➡\tNext Map: {next_map['map']}\n\n"
+        f"\t⏰\tStart: {next_map['time_start']}\n\n")
 
 """
     Get the raw servers status
