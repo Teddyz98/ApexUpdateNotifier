@@ -60,28 +60,28 @@ def get_server_status_raw():
 
 # TODO def show_all_regions_status():
 
-def show_region_status(server, region):
+def is_up(server, region):
 
-    status = ''
+    status_tmp = ''
+
+    ea_acc_server_status = server['EA_accounts'][region]['Status']
+    print('Accounts Server: ' + ea_acc_server_status + (' 🟢' if ea_acc_server_status=='UP' else ' 🔴') + '\n\n')
+    status_tmp += 'Accounts Server: ' + ea_acc_server_status + (' 🟢' if ea_acc_server_status=='UP' else ' 🔴') + '\n\n'
+
+    crossplay_auth_server_status = server['ApexOauth_Crossplay'][region]['Status']
+    print('Crossplay Auth Server: ' + crossplay_auth_server_status + (' 🟢' if crossplay_auth_server_status=='UP' else ' 🔴') + '\n\n')
+    status_tmp += 'Crossplay Auth Server: ' + crossplay_auth_server_status + (' 🟢' if crossplay_auth_server_status=='UP' else ' 🔴') + '\n\n'  
+
+    return status_tmp
+
+def show_region_status(server, region):
 
     try:
         if (region=='EU-West'):
-            ea_acc_server_status = server['EA_accounts']['EU-West']['Status']
-            print('Accounts Server: ' + ea_acc_server_status + (' 🟢' if ea_acc_server_status=='UP' else ' 🔴') + '\n\n')
-            status += 'Accounts Server: ' + ea_acc_server_status + (' 🟢' if ea_acc_server_status=='UP' else ' 🔴') + '\n\n'
-
-            crossplay_auth_server_status = server['ApexOauth_Crossplay']['EU-West']['Status']
-            print('Crossplay Auth Server: ' + crossplay_auth_server_status + (' 🟢' if crossplay_auth_server_status=='UP' else ' 🔴') + '\n\n')
-            status += 'Crossplay Auth Server: ' + crossplay_auth_server_status + (' 🟢' if crossplay_auth_server_status=='UP' else ' 🔴') + '\n\n'
-
-        elif(region=='EU-East'):
-            ea_acc_server_status = server['EA_accounts']['EU-East']['Status']
-            print('Accounts Server: ' + ea_acc_server_status + (' 🟢' if ea_acc_server_status=='UP' else ' 🔴'))
-            status += 'Accounts Server: ' + ea_acc_server_status + (' 🟢' if ea_acc_server_status=='UP' else ' 🔴')
+            status = is_up(server, region)
             
-            crossplay_auth_server_status = server['ApexOauth_Crossplay']['EU-East']['Status']
-            print('Crossplay Auth Server: ' + crossplay_auth_server_status + (' 🟢' if crossplay_auth_server_status=='UP' else ' 🔴') + '\n\n')
-            status += 'Crossplay Auth Server: ' + crossplay_auth_server_status + (' 🟢' if crossplay_auth_server_status=='UP' else ' 🔴') + '\n\n'
+        elif(region=='EU-East'):
+            status = is_up(server, region)
 
     except:
         print('Some error occured while retrieving the raw data from json file')

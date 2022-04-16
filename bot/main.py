@@ -37,7 +37,7 @@ def command_help(message):
 def map(message):
     bot.send_message(message.chat.id, get_map_informations(get_battle_royale_current_map()), parse_mode='MarkdownV2')
 
-@bot.message_handler(commands=['status'])
+@bot.message_handler(commands=['server'])
 def server_status(message):
     markup = telebot.types.InlineKeyboardMarkup()
     markup.row_width = 1
