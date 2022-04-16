@@ -1,7 +1,7 @@
 import dotenv
 import telebot
 import os
-from utils import get_battle_royale_current_map, get_map_informations, get_server_status_raw, show_region_status, is_platform_up, select_platform
+from utils import get_battle_royale_current_map, get_map_informations, get_server_status_raw, show_region_status, is_platform_up, select_platform, get_user_info
 
 dotenv.load_dotenv()
 API_KEY_TELEGRAM = os.environ.get('API_KEY_TELEGRAM')
@@ -61,6 +61,11 @@ def callback_query(call):
         #msg = bot.send_message(call.message.chat.id, show_region_status(get_server_status_raw(), call.data))
         bot.send_message(call.message.chat.id, f'{show_region_status(get_server_status_raw(), call.data)}\n\n{select_platform(get_server_status_raw(), call.data)}')
 
+@bot.message_handler(commands=['player'])
+def player_stats(message):
+    username = ' '.join(message.text.split(' ')[1:])
+    print(username)
+    bot.send_message(message.chat.id, get_user_info(username, 'PS4'), parse_mode='MarkdownV2')
 
 #TODO optimize complexity
     # if call.data in platforms:

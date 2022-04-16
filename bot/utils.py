@@ -48,6 +48,19 @@ def get_map_informations(map):
         f"\t➡\tNext Map: {next_map['map']}\n\n"
         f"\t⏰\tStart: {next_map['time_start']}\n\n")
 
+def get_user_stats_raw(username, platform):
+    response = requests.get(f'https://api.mozambiquehe.re/bridge?version=5&platform={platform}&player={username}&auth={APEX_API_KEY}')
+    return response.json()
+
+def get_user_info(username, platform):
+    raw_data = get_user_stats_raw(username, platform)
+    for char in ['_', '*']:
+        username = username.replace(char, '\\' + char, 1)
+
+    return (f"👤 *{username}*\n\n"
+        f"Level: {raw_data['global']['level']}\n\n"
+        f"BR\. Rank:\t _{raw_data['global']['rank']['rankName']}_\n\n"
+        f"Arena Rank:\t _{raw_data['global']['arena']['rankName']}_\n\n")
 """
     Get the raw servers status
 """
@@ -104,4 +117,3 @@ def show_region_status(server, region):
 def select_platform(server, region):
     status = is_platform_up(server, region)
     return status
-
