@@ -5,7 +5,19 @@ from utils import get_battle_royale_current_map, get_map_informations, get_serve
 
 dotenv.load_dotenv()
 API_KEY_TELEGRAM = os.environ.get('API_KEY_TELEGRAM')
+print(API_KEY_TELEGRAM)
 bot = telebot.TeleBot(API_KEY_TELEGRAM)
+print(bot)
+
+commands = {  # command description used in the "help" command
+    'start'       : '\tGet used to the bot',
+    'help'        : '\tShow available commands',
+    'map'         : '\tCurrent and the next map',
+    'server'      : '\tGet the server status'
+}
+
+regions = ["EU-West", "EU-East","US-West","US-East", "Southamerica", "Asia"]
+platforms = ["Origin_login","Playstation-Network","Xbox-Live"]
 
 @bot.message_handler(commands=['start'])
 def greet(message):
@@ -13,12 +25,17 @@ def greet(message):
         Hi there 👋🏼, I am Apex Update Notifier Bot. I notify you with some useful informations about Apex Legends!
         """)
 
+@bot.message_handler(commands=['help'])
+def command_help(message):
+    help_text = "⚙️ Commands: \n\n"
+    for key in commands:  # generate help text out of the commands dictionary defined at the top
+        help_text += "• /" + key + " - "
+        help_text += commands[key] + "\n"
+    bot.send_message(message.chat.id, help_text)  # send the generated help page
+
 @bot.message_handler(commands=['map'])
 def map(message):
     bot.send_message(message.chat.id, get_map_informations(get_battle_royale_current_map()), parse_mode='MarkdownV2')
-
-regions = ["EU-West", "EU-East","US-West","US-East", "Southamerica", "Asia"]
-platforms = ["Origin_login","Playstation-Network","Xbox-Live"]
 
 @bot.message_handler(commands=['status'])
 def server_status(message):
