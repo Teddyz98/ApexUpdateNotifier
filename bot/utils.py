@@ -83,6 +83,18 @@ def show_region_status(server, region):
         elif(region=='EU-East'):
             status = is_up(server, region)
 
+        elif(region=='US-Central'):
+            status = is_up(server, region)
+
+        elif(region=='US-East'):
+            status = is_up(server, region)
+
+        elif(region=='SouthAmerica'):
+            status = is_up(server, region)
+
+        elif(region=='Asia'):
+            status = is_up(server, region)
+
     except:
         print('Some error occured while retrieving the raw data from json file')
 
