@@ -1,7 +1,7 @@
 import dotenv
 import telebot
 import os
-from utils import get_battle_royale_current_map, get_map_informations, get_server_status_raw, show_region_status
+from utils import get_battle_royale_current_map, get_map_informations, get_server_status_raw, show_region_status, is_platform_up, select_platform
 
 dotenv.load_dotenv()
 API_KEY_TELEGRAM = os.environ.get('API_KEY_TELEGRAM')
@@ -59,23 +59,12 @@ def callback_query(call):
     if call.data in regions:
         bot.answer_callback_query(call.id, f"You chose {call.data}")
         #msg = bot.send_message(call.message.chat.id, show_region_status(get_server_status_raw(), call.data))
-        handle_platform(call.message, call.data)
+        bot.send_message(call.message.chat.id, f'{show_region_status(get_server_status_raw(), call.data)}\n\n{select_platform(get_server_status_raw(), call.data)}')
+
 
 #TODO optimize complexity
     # if call.data in platforms:
     #     bot.answer_callback_query(call.id, f"You chose {call.data}")
     #     msg = bot.send_message(call.message.chat.id, show_platform_status(get_server_status_raw(), call.data))
         
-
-@bot.message_handler()
-def handle_platform(message, region):
-    markup = telebot.types.InlineKeyboardMarkup()
-    markup.row_width = 1
-    markup.add(
-        telebot.types.InlineKeyboardButton("PC", callback_data="Origin_login"),
-        telebot.types.InlineKeyboardButton("Playstation", callback_data="Playstation-Network"),
-        telebot.types.InlineKeyboardButton("XBoX", callback_data="Xbox-Live"))
-
-    bot.send_message(message.chat.id, f'{show_region_status(get_server_status_raw(), region)}\n\n 🖱🎮 Choose your platform', reply_markup=markup)
-
 bot.infinity_polling()

@@ -62,40 +62,46 @@ def get_server_status_raw():
 
 def is_up(server, region):
 
-    status_tmp = ''
-
     ea_acc_server_status = server['EA_accounts'][region]['Status']
-    print('Accounts Server: ' + ea_acc_server_status + (' 🟢' if ea_acc_server_status=='UP' else ' 🔴') + '\n\n')
-    status_tmp += 'Accounts Server: ' + ea_acc_server_status + (' 🟢' if ea_acc_server_status=='UP' else ' 🔴') + '\n\n'
+    print('Accounts: ' + ea_acc_server_status + (' 🟢' if ea_acc_server_status=='UP' else ' 🔴') + '\n\n')
+    status_tmp ='Accounts:\t\t\t' + ea_acc_server_status + (' 🟢' if ea_acc_server_status=='UP' else ' 🔴') + '\n\n'
 
     crossplay_auth_server_status = server['ApexOauth_Crossplay'][region]['Status']
-    print('Crossplay Auth Server: ' + crossplay_auth_server_status + (' 🟢' if crossplay_auth_server_status=='UP' else ' 🔴') + '\n\n')
-    status_tmp += 'Crossplay Auth Server: ' + crossplay_auth_server_status + (' 🟢' if crossplay_auth_server_status=='UP' else ' 🔴') + '\n\n'  
+    print('Crossplay Auth: ' + crossplay_auth_server_status + (' 🟢' if crossplay_auth_server_status=='UP' else ' 🔴') + '\n\n')
+    status_tmp += 'Crossplay Auth:\t\t\t' + crossplay_auth_server_status + (' 🟢' if crossplay_auth_server_status=='UP' else ' 🔴') + '\n\n'  
 
     return status_tmp
 
+def is_platform_up(server, region):
+
+    status_tmp = ''
+    
+    pc_status = server['Origin_login'][region]['Status']
+    play_status = server['otherPlatforms']['Playstation-Network']['Status']
+    xbox_status = server['otherPlatforms']['Xbox-Live']['Status']
+
+    print('PC: ' + pc_status + ('🟢' if pc_status=='UP' else ' 🔴') + '\n\n')
+    status_tmp += 'PC:\t\t\t' + pc_status + (' 🟢' if pc_status=='UP' else ' 🔴') + '\n\n'
+
+    print('Playstation: ' + play_status + (' 🟢' if play_status=='UP' else ' 🔴') + '\n\n')
+    status_tmp += 'Playstation:\t\t\t' + play_status + (' 🟢' if play_status=='UP' else ' 🔴') + '\n\n'
+
+    print('Xbox: ' + xbox_status + (' 🟢' if xbox_status=='UP' else ' 🔴') + '\n\n')
+    status_tmp += 'Xbox:\t\t\t' + xbox_status + (' 🟢' if xbox_status=='UP' else ' 🔴') + '\n\n'
+
+    return status_tmp
+
+
 def show_region_status(server, region):
 
-    try:
-        if (region=='EU-West'):
-            status = is_up(server, region)
-            
-        elif(region=='EU-East'):
-            status = is_up(server, region)
-
-        elif(region=='US-Central'):
-            status = is_up(server, region)
-
-        elif(region=='US-East'):
-            status = is_up(server, region)
-
-        elif(region=='SouthAmerica'):
-            status = is_up(server, region)
-
-        elif(region=='Asia'):
-            status = is_up(server, region)
-
+    try:    
+        status = is_up(server, region)
     except:
         print('Some error occured while retrieving the raw data from json file')
 
     return status
+
+def select_platform(server, region):
+    status = is_platform_up(server, region)
+    return status
+
