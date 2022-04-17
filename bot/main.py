@@ -18,6 +18,7 @@ commands = {  # command description used in the "help" command
 
 regions = ["EU-West", "EU-East","US-West","US-East", "Southamerica", "Asia"]
 platforms = ["Origin_login","Playstation-Network","Xbox-Live"]
+platforms_stats = ['PC','PS4','X1']
 
 @bot.message_handler(commands=['start'])
 def greet(message):
@@ -53,23 +54,33 @@ def server_status(message):
     bot.send_message(message.chat.id, '🗺 Choose your region', reply_markup=markup)
     print(message.chat.id)
 
-@bot.callback_query_handler(func=lambda call: True)
-def callback_query(call):
+@bot.callback_query_handler(lambda call: call.data in regions)
+def callback_query_servers(call):
         
-    if call.data in regions:
-        bot.answer_callback_query(call.id, f"You chose {call.data}")
-        #msg = bot.send_message(call.message.chat.id, show_region_status(get_server_status_raw(), call.data))
-        bot.send_message(call.message.chat.id, f'{show_region_status(get_server_status_raw(), call.data)}\n\n{select_platform(get_server_status_raw(), call.data)}')
+    bot.answer_callback_query(call.id, f"You chose {call.data}")
+    bot.send_message(call.message.chat.id, f'{show_region_status(get_server_status_raw(), call.data)}\n\n{select_platform(get_server_status_raw(), call.data)}')
 
 @bot.message_handler(commands=['player'])
 def player_stats(message):
-    username = ' '.join(message.text.split(' ')[1:])
-    print(username)
-    bot.send_message(message.chat.id, get_user_info(username, 'PS4'), parse_mode='MarkdownV2')
 
-#TODO optimize complexity
-    # if call.data in platforms:
-    #     bot.answer_callback_query(call.id, f"You chose {call.data}")
-    #     msg = bot.send_message(call.message.chat.id, show_platform_status(get_server_status_raw(), call.data))
+    username = ' '.join(message.text.split(' ')[1:])
+
+    markup = telebot.types.InlineKeyboardMarkup()
+    markup.row_width = 1
+    markup.add(
+        telebot.types.InlineKeyboardButton("PC", callback_data="PC"),
+        telebot.types.InlineKeyboardButton("PS4", callback_data="PS4"),
+        telebot.types.InlineKeyboardButton("Xbox", callback_data="X1")
+    )
+
+    bot.send_message(message.chat.id, f'Choose your platform {username}', reply_markup=markup) #the "username" in the message is necessary to pass it to the query handler
+
+@bot.callback_query_handler(lambda call: call.data in platforms_stats)
+def callback_query_platforms(call):
+
+    print(call)
+    bot.answer_callback_query(call.id, f"You chose {call.data}")
+    username = call.message.text.split()[-1] #get last word
+    bot.send_message(call.message.chat.id, get_user_info(username, call.data), parse_mode='MarkdownV2')
         
 bot.infinity_polling()
