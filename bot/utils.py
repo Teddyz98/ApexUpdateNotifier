@@ -1,8 +1,8 @@
-from telnetlib import STATUS
 import dotenv
 import requests
 import os
 from datetime import datetime
+import pytz
 
 dotenv.load_dotenv()
 
@@ -42,7 +42,8 @@ def get_arena_current_map():
 def get_map_informations(map):
     current_map = map["current"]
     next_map = map["next"]
-    next_map["time_start"] = datetime.strftime(datetime.fromtimestamp(next_map["start"]), '%H:%M')
+    timezone = pytz.timezone('Europe/Rome')
+    next_map["time_start"] = datetime.strftime(datetime.fromtimestamp(next_map["start"],timezone), '%H:%M')
     return (f"📍\tCurrent Map: *{current_map['map']}*\n\n"
         f"\t🕒\tRemaining Timer: {current_map['remainingTimer']}\n\n"
         f"\t➡\tNext Map: {next_map['map']}\n\n"
